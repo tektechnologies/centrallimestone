@@ -1,0 +1,513 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.1 Transitional//EN">
+<HTML>
+
+
+
+
+<HEAD>
+<title></title>
+
+<SCRIPT Language="JavaScript">
+
+
+
+
+function perRound(num, precision) {
+
+	var precision = 3; //default value if not passed from caller, change if desired
+
+	// remark if passed from caller
+
+	precision = parseInt(precision); // make certain the decimal precision is an integer
+
+    var result1 = num * Math.pow(10, precision);
+
+    var result2 = Math.round(result1);
+
+    var result3 = result2 / Math.pow(10, precision);
+
+    return zerosPad(result3, precision);
+
+}
+
+
+
+function zerosPad(rndVal, decPlaces) {
+
+    var valStrg = rndVal.toString(); // Convert the number to a string
+
+    var decLoc = valStrg.indexOf("."); // Locate the decimal point
+
+    // check for a decimal 
+
+    if (decLoc == -1) {
+
+        decPartLen = 0; // If no decimal, then all decimal places will be padded with 0s
+
+        // If decPlaces is greater than zero, add a decimal point
+
+        valStrg += decPlaces > 0 ? "." : "";
+
+    }
+
+    else {
+
+        decPartLen = valStrg.length - decLoc - 1; // If there is a decimal already, only the needed decimal places will be padded with 0s
+
+    }
+
+     var totalPad = decPlaces - decPartLen;    // Calculate the number of decimal places that need to be padded with 0s
+
+    if (totalPad > 0) {
+
+        // Pad the string with 0s
+
+        for (var cntrVal = 1; cntrVal <= totalPad; cntrVal++) 
+
+            valStrg += "0";
+
+        }
+
+    return valStrg;
+
+}
+
+// send the value in as "num" in a variable
+
+
+
+// clears field of default value
+
+function clear_field(field) {
+
+		if (field.value==field.defaultValue) {
+
+			field.value=''
+
+		}
+
+	}
+
+
+
+function calcAgg(form)
+
+{
+
+	var aggAmt = 0;
+
+
+
+	if (form.RockType[0].checked)
+
+		form.Density.value = "1.15";
+
+	else if (form.RockType[1].checked)
+
+		form.Density.value="1.35";
+
+
+
+	var parsecheck = "" + parseFloat(form.Width.value);
+
+
+
+	if (parseFloat(form.Width.value)< 0 ||
+
+	parseFloat(form.Width.value) == 0 ||
+
+	parsecheck == "NaN")
+
+	{
+
+		window.alert("All four input fields require a positive numeric entry.");
+
+		return false;
+
+	}
+
+
+
+	var parsecheck = "" + parseFloat(form.Length.value);
+
+
+
+	if (parseFloat(form.Length.value)< 0 ||
+
+	parseFloat(form.Length.value) == 0 ||
+
+	parsecheck == "NaN")
+
+	{
+
+		window.alert("All four input fields require a positive numeric entry.");
+
+		return false;
+
+	}
+
+
+
+	var parsecheck = "" + parseFloat(form.Thickness.value);
+
+
+
+	if (parseFloat(form.Thickness.value)< 0 ||
+
+	parseFloat(form.Thickness.value) == 0 ||
+
+	parsecheck == "NaN")
+
+	{
+
+		window.alert("All four input fields require a positive numeric entry.");
+
+		return false;
+
+	}
+
+
+
+	if (form.InchesFeet[0].checked)
+		aggAmt = (form.Width.value * form.Length.value * form.Thickness.value / 27.0) * form.Density.value  ;
+
+	else 
+        aggAmt = (form.Width.value * form.Length.value * (form.Thickness.value / 12.0) / 27.0) * form.Density.value ;
+
+		<!-- aggAmt = (form.Width.value * form.Length.value * (form.Thickness.value / 12.0) / 27.0) * form.Density.value / 2000.0; --> 
+
+
+
+	form.Total.value = formatvalue(aggAmt,7);
+
+	return true;
+
+}
+
+
+
+function formatvalue(input, rsize)
+
+{
+
+
+
+   var invalid = "**************************";
+
+
+
+   var nines = "999999999999999999999999";
+
+
+
+   var strin = "" + input;
+
+
+
+   var fltin = parseFloat(strin);
+
+
+
+   if (strin.indexOf("e") != -1 ||
+
+
+
+       fltin > parseFloat(nines.substring(0,rsize)+".4"))
+
+
+
+      return invalid.substring(0, rsize);
+
+
+
+   if (strin.length<= rsize) return strin;
+
+
+
+   var rounded = "" + (fltin + 
+
+
+
+      (fltin - parseFloat(strin.substring(0, rsize))));
+
+
+
+   return rounded.substring(0, rsize);
+
+
+
+}
+
+
+
+function ResetAggregate(form)
+
+{
+
+	form.Width.value = "";
+
+	form.Length.value = "";
+
+	form.Thickness.value = "";
+
+
+
+	if (form.RockType[0].checked)
+
+		form.Density.value = "1.15";
+
+	else if (form.RockType[1].checked)
+
+		form.Density.value = "1.35";
+
+	else
+
+		form.Density.value = "1.4";
+
+}
+
+
+
+function setDensity(form,density) {
+
+
+
+    form.Density.value=density;
+
+
+
+    form.Total.value=" ";
+
+
+
+}
+
+
+
+//-->
+
+</SCRIPT>
+
+</HEAD>
+
+
+<font face="Arial,Helvetica,Geneva,Swiss,SunSans-Regular">
+
+<BODY BGCOLOR=FFFFFF TEXT=000000 LINK=0000FF VLINK=800080>
+
+
+<STYLE TYPE="text/css">
+<!--
+body { font-family: Tahoma, Verdana; }
+input.btn {
+  color:black;
+  font: bold 75% 'tahoma',helvetica,sans-serif;
+  background-color:#ffd148;
+  border: 2px solid;
+  border-color: #c7c5c8;
+ }
+  
+ input.btn2 {
+  color:black;
+  font: bold 95% 'tahoma',helvetica,sans-serif;
+  background-color:#ffd148;
+  border: 2px solid;
+  border-color: #c7c5c8;
+ 
+}
+//-->
+</STYLE>
+
+
+
+
+
+
+
+
+
+<center>
+
+
+
+<br><br>
+
+<FORM name="formAggregate">
+
+
+
+
+<center>
+
+<TABLE ALIGN="center" BORDER=5 CELLPADDING=5>
+
+<TR BGCOLOR=#B6D4D2>
+
+
+
+</tr>
+
+<TR BGCOLOR=#7BADCB>
+
+<TD align="center" colspan="2">
+
+Thank you For visiting our Site!
+
+</td>
+
+</tr>
+
+<TR>
+
+<TD>														Width 
+
+</TD>
+
+<TD>
+
+<input type="text" name="Width" size="12" value="0" onFocus="clear_field(this)"> Feet
+
+</TD>
+
+</TR>
+
+<TR>
+
+<TD>														Length
+
+</TD>
+
+<TD>
+
+<input type="text" name="Length" size="12" value="0" onFocus="clear_field(this)"> Feet
+
+</TD>
+
+</TR>
+
+<TR>
+
+<TD>Thickness
+
+</TD>
+
+<TD>
+
+<input type="text" name="Thickness" size="12" value="0" onFocus="clear_field(this)"> <input type="radio" name="InchesFeet" checked value="feet"> Feet 
+
+<input type="radio" name="InchesFeet" value="inches"> Inches
+
+</TD>
+
+</TR>
+
+<TR BGCOLOR=#7BADCB>
+
+<TD colspan="2">
+
+Material
+<BR><BR>
+
+ <input type="radio" name="RockType" checked value="Base Rock" onClick="setDensity (this.form, '1.15')"> CA11, CA16, CA1, CA5, RR1 thru RR7<BR><BR>
+
+<input type="radio" name="RockType" value="Drain Rock" onClick="setDensity (this.form, '1.35')">  CA6 <BR><BR>
+
+<input type="radio" name="RockType" value="Custom" onClick="setDensity (this.form, '1.4')"> CA6A (Pug), FA21 and Ag Lime <BR><BR>
+
+</TD>
+
+</TR>
+
+<TR>
+
+<TD>														Material Density 
+
+</TD>
+
+<TD align="right">
+
+<input type="text" name="Density" size="12" value="1.15" onFocus="clear_field(this)"> 
+
+</TD>
+
+</TR>
+
+<TR>
+
+<TD ALIGN="center" colspan="2" BGCOLOR=#7BADCB>
+
+<input type="button" value="Calculate" onClick="calcAgg(this.form)">&nbsp;&nbsp;&nbsp;
+
+<input type="button" value="Clear Values" onClick="ResetAggregate(formAggregate)"> 
+<br>
+
+
+</TD>
+
+</TR>
+
+<TR BGCOLOR=#7BADCB>
+
+<TD align="center" colspan="2">
+
+Calculated Results
+
+</td>
+
+</tr>
+
+<TR>
+
+<TD>															Total Tons Of Material Required
+
+</TD>
+
+<TD>
+
+<input type="text" name="Total" size="12" value="0" readonly>
+
+</td>
+
+</tr>
+
+</table>
+
+</form>
+
+
+
+
+
+
+</center>
+
+
+
+<BR><BR>
+
+
+
+</BODY> 
+
+</HTML>
+
+
+
+<!-- Tonnage Calculator is  L x W x H / 12 / 27 x C
+
+
+		aggAmt = (form.Width.value * form.Length.value * form.Thickness.value / 27.0) * form.Density.value ;
+                      
+	else 
+
+		aggAmt = (form.Width.value * form.Length.value * (form.Thickness.value / 12.0) / 27.0) * form.Density.value ;
+
+
+
+L is length in feet
+W is width in feet
+
+H is height in inches
+C is 1.15 for CA11, CA16, CA1, CA5, RR1 thru RR7
+C is 1.35 for CA6
+C is 1.4 for CA6A (Pug), FA21 and Ag Lime -->
